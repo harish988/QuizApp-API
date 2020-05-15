@@ -1,4 +1,4 @@
-# quizAppAPI
+# QuizAppAPI
 APIs for the Quiz Application
 
 ## Steps to be followed for local deployment:
