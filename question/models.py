@@ -10,6 +10,8 @@ class Domain(models.Model):
 
     class Meta:
         verbose_name_plural = "Domains"
+        managed = True
+        db_table = 'domain'
 
 #Quiz Model
 class Quiz(models.Model):
@@ -19,6 +21,8 @@ class Quiz(models.Model):
     domain_id = models.ForeignKey(Domain, verbose_name = "domain", on_delete=models.CASCADE)
     no_of_questions = models.IntegerField()
     pass_mark = models.IntegerField()
+    total_marks = models.IntegerField()
+    time_in_minutes = models.IntegerField()
     quiz_image = models.BinaryField(blank=True)
     hardness_choices = (
         ('BEGINNER', 'Beginner'),
@@ -32,6 +36,8 @@ class Quiz(models.Model):
 
     class Meta:
         verbose_name_plural = "Quizzes"
+        managed = True
+        db_table = 'quiz'
 
 #Question Model
 class Question(models.Model):
@@ -40,19 +46,21 @@ class Question(models.Model):
     question_text = models.CharField(max_length=5000)
     question_image = models.BinaryField(blank=True)
     mark = models.IntegerField()
-    quiz_type_choices = (
+    question_type_choices = (
         ('SINGLECHOICE', 'SingleChoice'),
         ('MULTIPLECHOICE', 'MultipleChoice'),
+        ('TEXT', 'Text'),
     )
-    quiz_type = models.CharField(choices=quiz_type_choices, max_length=20)
+    question_type = models.CharField(choices=question_type_choices, max_length=20)
     no_of_answers = models.IntegerField()
-    correct_answer_id = models.IntegerField()
 
     def __str__(self):
         return self.question_text
 
     class Meta:
         verbose_name_plural = "Questions"
+        managed = True
+        db_table = 'question'
 
 #Answer Model
 class Answer(models.Model):
@@ -61,9 +69,16 @@ class Answer(models.Model):
     question_id = models.ForeignKey(Question, verbose_name="question", on_delete=models.CASCADE)
     answer_text = models.CharField(max_length=500)
     answer_image = models.BinaryField(blank=True)
+    is_correct_answer_choices = (
+        ('TRUE', 'True'),
+        ('FALSE', 'False'),
+    )
+    is_correct_answer = models.CharField(choices=is_correct_answer_choices, max_length=10)
 
     def __str__(self):
         return self.answer_text
 
     class Meta:
         verbose_name_plural = "Answers"
+        managed = True
+        db_table = 'answer'

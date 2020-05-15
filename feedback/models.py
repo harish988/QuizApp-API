@@ -27,3 +27,5 @@ class Rating(models.Model):
 
     class Meta:
         verbose_name_plural = "Ratings"
+        managed = True
+        db_table = 'rating'

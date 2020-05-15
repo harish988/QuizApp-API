@@ -6,15 +6,15 @@ class QuizAdmin(admin.ModelAdmin):
     list_filter = ['domain_id', 'hardness']
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ['quiz_id', 'mark', 'quiz_type', 'correct_answer_id']
-    list_filter = ['quiz_id', 'quiz_type']
+    list_display = ['quiz_id', 'mark', 'question_type']
+    list_filter = ['quiz_id', 'question_type']
 
 class DomainAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
 
 class AnswerAdmin(admin.ModelAdmin):
-    list_display = ['quiz_id', 'question_id', 'answer_text']
-    list_filter = ['quiz_id', 'question_id']
+    list_display = ['quiz_id', 'question_id', 'answer_text', 'is_correct_answer']
+    list_filter = ['quiz_id', 'question_id', 'is_correct_answer']
 
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Question, QuestionAdmin)

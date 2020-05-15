@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from question.views import quiz, questions_with_answers
+from score.views import user_answer
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("quiz", quiz, name="quiz"),
+    path("questions/<int:quiz_id>", questions_with_answers, name="questions_with_answers"),
+    path("questions/<int:quiz_id>/<int:question_id>", questions_with_answers, name="questions_with_answers"),
+    path("user-answer", user_answer, name="user_answer")
 ]

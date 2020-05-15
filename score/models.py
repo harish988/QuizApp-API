@@ -11,7 +11,7 @@ class UserAnswer(models.Model):
     answer_id = models.ForeignKey(Answer, verbose_name="answer", on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
     class Meta:
         verbose_name_plural = "User Answers"
@@ -24,7 +24,7 @@ class UserScore(models.Model):
     score = models.IntegerField()
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
     class Meta:
         verbose_name_plural = "User Scores"
