@@ -16,16 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from question.views import quiz, questions_with_answers
-from score.views import user_answer
+from score.views import user_answer, submit
 from user.views import user, unique_username, login
+from feedback.views import feedback
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("quiz", quiz, name="quiz"),
     path("questions/<int:quiz_id>", questions_with_answers, name="questions_with_answers"),
     path("questions/<int:quiz_id>/<int:question_id>", questions_with_answers, name="questions_with_answers"),
-    path("user-answer", user_answer, name="user_answer"),
-    path("user", user, name="user_answer"),
+    path("answer", user_answer, name="user_answer"),
+    path("answer/submit", submit, name="submit"),
+    path("user", user, name="user"),
     path("user/unique", unique_username, name="unique_username"),
     path("user/login", login, name="login"),
+    path("feedback", feedback, name="feedback"),
 ]

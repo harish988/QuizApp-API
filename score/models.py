@@ -7,6 +7,7 @@ from user.models import UserProfile
 class UserAnswer(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(UserProfile, verbose_name="user", on_delete=models.CASCADE)
+    quiz_id = models.ForeignKey(Quiz, verbose_name="quiz", on_delete=models.CASCADE)
     question_id = models.ForeignKey(Question, verbose_name="question", on_delete=models.CASCADE)
     answer_id = models.ForeignKey(Answer, verbose_name="answer", on_delete=models.CASCADE)
 
@@ -21,7 +22,7 @@ class UserScore(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(UserProfile, verbose_name="user", on_delete=models.CASCADE)
     quiz_id = models.ForeignKey(Quiz, verbose_name="quiz", on_delete=models.CASCADE)
-    score = models.IntegerField()
+    score = models.FloatField()
 
     def __str__(self):
         return str(self.id)

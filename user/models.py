@@ -42,13 +42,12 @@ class Section(models.Model):
 #User Model
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    roll_no = models.CharField(max_length=15)
     department = models.ForeignKey(Department, verbose_name="department", on_delete=models.CASCADE)
     year = models.ForeignKey(Year, verbose_name="year", on_delete=models.CASCADE)
     section = models.ForeignKey(Section, verbose_name="section", on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.roll_no
+        return self.user.username
 
     class Meta:
         verbose_name_plural = "UserProfile"

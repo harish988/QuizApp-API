@@ -20,6 +20,7 @@ class Quiz(models.Model):
     description = models.CharField(max_length=5000)
     domain_id = models.ForeignKey(Domain, verbose_name = "domain", on_delete=models.CASCADE)
     no_of_questions = models.IntegerField()
+    no_of_question_to_display = models.IntegerField()
     pass_mark = models.IntegerField()
     total_marks = models.IntegerField()
     time_in_minutes = models.IntegerField()

@@ -15,23 +15,35 @@ def user(request):
         response = {}
         body = list()
         try:
+            response["details"] = {}
+            response["status"] = 400
+            response["code"] = "FAILED"
             for data in user:
-                user = User.objects.create_user(username=data["username"], email=data["email"], password=data["password"], first_name=data["first_name"], last_name=data["last_name"])
+                user = User.objects.create_user(username=data["roll_no"], email=data["email"], password=data["password"], first_name=data["first_name"], last_name=data["last_name"])
                 user.save()
-                year = Year.objects.filter(name=data["year"])[0]
-                department = Department.objects.filter(name=data["department"])[0]
-                section = Section.objects.filter(name=data["section"])[0]
-                user_profile = UserProfile.objects.create(user=user, roll_no=data["roll_no"], year=year, department=department, section=section)
+                year = Year.objects.filter(name=data["year"])
+                if(year.count() == 0):
+                    response["message"] = "Year with the given Name("+str(data['year'])+") not found"
+                    return JsonResponse(response)
+                department = Department.objects.filter(name=data["department"])
+                if(department.count() == 0):
+                    response["message"] = "Department with the given Name("+str(data['department'])+") not found"
+                    return JsonResponse(response)
+                section = Section.objects.filter(name=data["section"])
+                if(section.count() == 0):
+                    response["message"] = "Section with the given Name("+str(data['section'])+") not found"
+                    return JsonResponse(response)
+                user_profile = UserProfile.objects.create(user=user, year=year[0], department=department[0], section=section[0])
                 user_profile.save()
                 body.append({"id": user_profile.id, "created_time": datetime.datetime.now()})
-            response["user"] = body
+            response["details"] = body
             response["status"] = 201
             response["code"] = "SUCCESS"
             response["message"] = "User(s) Inserted Succesfully"
             return JsonResponse(response)
         except Exception as e:
             traceback.print_exc()
-            response["user"] = {}
+            response["details"] = {}
             response["status"] = 400
             response["code"] = "FAILED"
             response["mesaage"] = traceback.print_exc()
@@ -55,11 +67,12 @@ def login(request):
             response["message"] = "Invalid UserName"
         return JsonResponse(response)
 
+@csrf_exempt
 def unique_username(request):
-    if(request.method == 'GET'):
+    if(request.method == 'POST'):
         json_data = json.loads(request.body)
         response = {"unique": True}
-        count = User.objects.filter(username=json_data["username"]).count()
+        count = User.objects.filter(username=json_data["roll_no"]).count()
         if(count > 0):
             response["unique"] = False
         return JsonResponse(response)
