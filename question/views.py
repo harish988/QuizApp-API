@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Quiz, Question, Answer
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import api_view
 
+@api_view(['GET'])
 def quiz(request):
     if(request.method == 'GET'):
         quizzes = Quiz.objects.all()
@@ -11,8 +15,10 @@ def quiz(request):
             s = {'id': quiz.id, 'name': quiz.name, 'description': quiz.description, 'domain_name': quiz.domain_id.name, 'no_of_questions': quiz.no_of_questions, 'no_of_answers_to_display': quiz.no_of_question_to_display, 'pass_mark': quiz.pass_mark, 'time': quiz.time_in_minutes, 'hardness': quiz.hardness}
             body.append(s)
         response['quiz'] = body
-        return JsonResponse(response)
+        return Response(response, status=status.HTTP_200_OK)
 
+
+@api_view(['GET'])
 def questions_with_answers(request, quiz_id, question_id=None):
     if(request.method == 'GET'):
         if(question_id is None):
@@ -39,4 +45,4 @@ def questions_with_answers(request, quiz_id, question_id=None):
             question_properties[id]['answers'] = question_answers[id]
             questions.append(question_properties[id])
         response['question'] = questions
-        return JsonResponse(response)
+        return Response(response)

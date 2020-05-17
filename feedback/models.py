@@ -20,7 +20,7 @@ class Rating(models.Model):
         (5, 5),
     )
     rating = models.IntegerField(choices=rating_choices, default=5)
-    comments = models.CharField(max_length=5000)
+    comments = models.CharField(max_length=5000, null=True)
     
     def __str__(self):
         return str(self.rating)

@@ -30,7 +30,7 @@ class Quiz(models.Model):
         ('INTERMEDIATE', 'Intermediate'),
         ('ADVANCE', 'Advance'),
     )
-    hardness = models.CharField(choices=hardness_choices, default='BEGINNER', max_length=10)
+    hardness = models.CharField(choices=hardness_choices, default='BEGINNER', max_length=20)
 
     def __str__(self):
         return self.name
