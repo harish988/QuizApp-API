@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 
 @csrf_exempt
-@api_view(["POST"])
+@api_view(["POST", "GET"])
 def user(request):
     if(request.method == 'POST'):
         json_data = json.loads(request.body)
@@ -87,6 +87,7 @@ def userById(request, user_id):
         return JsonResponse(response, status=status.HTTP_200_OK)
 
 @csrf_exempt
+@api_view(["POST"])
 def login(request):
     if(request.method == 'POST'):
         json_data = json.loads(request.body)
@@ -106,6 +107,7 @@ def login(request):
         return JsonResponse(response, status=status.HTTP_200_OK)
 
 @csrf_exempt
+@api_view(["POST"])
 def unique_username(request):
     if(request.method == 'POST'):
         json_data = json.loads(request.body)
@@ -113,4 +115,40 @@ def unique_username(request):
         count = User.objects.filter(username=json_data["roll_no"]).count()
         if(count > 0):
             response["unique"] = False
+        return JsonResponse(response, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def department(request):
+    if(request.method == 'GET'):
+        response = {}
+        body = list()
+        departments = Department.objects.all()
+        for department in departments:
+            body.append({"id": department.id, "name":department.name})
+        response["department"] = body
+        return JsonResponse(response, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def year(request):
+    if(request.method == 'GET'):
+        response = {}
+        body = list()
+        years = Year.objects.all()
+        for year in years:
+            body.append({"id": year.id, "name":year.name})
+        response["year"] = body
+        return JsonResponse(response, status=status.HTTP_200_OK)
+    
+
+@api_view(["GET"])
+def section(request):
+    if(request.method == 'GET'):
+        response = {}
+        body = list()
+        sections = Section.objects.all()
+        for section in sections:
+            body.append({"id": section.id, "name":section.name})
+        response["section"] = body
         return JsonResponse(response, status=status.HTTP_200_OK)

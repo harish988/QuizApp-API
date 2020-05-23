@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from question.views import quiz, questions_with_answers
 from score.views import user_answer, submit, leaderboard
-from user.views import user, unique_username, login, userById
+from user.views import user, unique_username, login, userById, department, year, section
 from feedback.views import feedback
 
 urlpatterns = [
@@ -35,4 +35,7 @@ urlpatterns = [
     path("feedback", feedback, name="feedback"),
     path("leaderboard/<int:quiz_id>/<int:top>", leaderboard, name="leaderboard"),
     path("leaderboard/<int:quiz_id>", leaderboard, name="leaderboard"),
+    path("metadata/department", department, name="department"),
+    path("metadata/year", year, name="year"),
+    path("metadata/section", section, name="section"),
 ]
