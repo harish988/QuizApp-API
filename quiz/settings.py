@@ -25,7 +25,7 @@ SECRET_KEY = '!5opy4fh%m)yn1(6nlsifu7ilua9$%=1r7j@$6_f$jdzlb-d*#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['http://lit-quiz-app.herokuapp.com']
 
 APPEND_SLASH = False
 
