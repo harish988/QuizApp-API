@@ -1,1 +1,1 @@
-web: gunicorn quiz.py --log-file -
+web: gunicorn quiz.py:application --log-file - --log-level debug
