@@ -7,8 +7,12 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import datetime
 import traceback
+from rest_framework import status
+from rest_framework.decorators import api_view
+
 
 @csrf_exempt
+@api_view(['POST'])
 def user_answer(request):
     if(request.method == 'POST'):
         json_data = json.loads(request.body)
@@ -43,17 +47,18 @@ def user_answer(request):
             response["status"] = 201
             response["code"] = "SUCCESS"
             response["message"] = "Answer(s) Submitted Succesfully"
-            return JsonResponse(response)
+            return JsonResponse(response, status=status.HTTP_201_CREATED)
         except Exception as e:
             traceback.print_exc()
             response["details"] = {}
             response["status"] = 400
             response["code"] = "FAILED"
             response["mesaage"] = traceback.print_exc()
-            return JsonResponse(response)
+            return JsonResponse(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 
 @csrf_exempt
+@api_view(['POST'])
 def submit(request):
     if(request.method == 'POST'):
         json_data = json.loads(request.body)
@@ -102,11 +107,25 @@ def submit(request):
             response["status"] = 201
             response["code"] = "SUCCESS"
             response["message"] = "Score(s) Calculated Succesfully"
-            return JsonResponse(response)
+            return JsonResponse(response, status=status.HTTP_201_CREATED)
         except Exception as e:
             traceback.print_exc()
             response["details"] = {}
             response["status"] = 400
             response["code"] = "FAILED"
             response["mesaage"] = traceback.print_exc()
-            return JsonResponse(response)
+            return JsonResponse(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+def leaderboard(request, quiz_id, top=10):
+    response = {}
+    body = list()
+    user_scores_count = UserScore.objects.filter(quiz_id=quiz_id).count()
+    if(user_scores_count < top):
+        top = user_scores_count
+    user_scores = UserScore.objects.filter(quiz_id=quiz_id).order_by('-score')[:top]
+    for score in user_scores:
+        body.append({'first_name': score.user.user.first_name, 'last_name': score.user.user.last_name, 'year': score.user.year, 'department': score.user.department, 'section': score.user.section, 'score': score.score})
+    response["leaderboard"] = body
+    return JsonResponse(response, status=status.HTTP_200_OK)

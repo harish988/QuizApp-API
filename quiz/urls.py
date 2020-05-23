@@ -22,7 +22,7 @@ from user.views import user, unique_username, login, userById, department, year,
 from feedback.views import feedback
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin', admin.site.urls),
     path("quiz/<int:user_id>", quiz, name="quiz"),
     path("questions/<int:user_id>/<int:quiz_id>", questions_with_answers, name="questions_with_answers"),
     path("questions/<int:user_id>/<int:quiz_id>/<int:question_id>", questions_with_answers, name="questions_with_answers"),
