@@ -42,13 +42,13 @@ def questions_with_answers(request, user_id, quiz_id, question_id=None):
         for answer in answers:
             if(answer.question_id in question_answers):
                 before_adding_answers = question_answers[answer.question_id]
-                ans = {'id': answer.id,'answer_text': answer.answer_text, 'is_correct': answer.is_correct_answer}
+                ans = {'id': answer.id,'answer_text': answer.answer_text}
                 before_adding_answers.append(ans)
                 question_answers[answer.question_id] = before_adding_answers
             else:
                 if(answered_questions_ids is not None and answer.question_id in answered_questions_ids):
                     continue
-                ans = {'id': answer.id, 'answer_text': answer.answer_text, 'is_correct': answer.is_correct_answer}
+                ans = {'id': answer.id, 'answer_text': answer.answer_text}
                 question_answers[answer.question_id] = [ans]
                 question_properties[answer.question_id] = {'id': answer.question_id.id, 'question_text': answer.question_id.question_text, 'mark': answer.question_id.mark, 'question_type': answer.question_id.question_type, 'no_of_answers': answer.question_id.no_of_answers}
                 question_ids.append(answer.question_id)
