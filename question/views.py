@@ -6,15 +6,22 @@ from user.models import UserProfile
 from rest_framework import status
 import json
 from rest_framework.decorators import api_view
-
+from itertools import chain
+from django.utils import timezone
+import pytz
 
 @api_view(['GET'])
 def quiz(request, user_id):
     if(request.method == 'GET'):
-        quizzes = Quiz.objects.all()
+        current_time = timezone.now()
+        quizzes = Quiz.objects.filter(quiz_start_time__lte=current_time, quiz_end_time__gte= current_time)
+        quizzes_null_start_time = Quiz.objects.filter(quiz_start_time__isnull=True, quiz_end_time__gte= current_time)
+        quizzes_null_end_time = Quiz.objects.filter(quiz_start_time__lte=current_time, quiz_end_time__isnull=True)
+        quizzes_null_both = Quiz.objects.filter(quiz_start_time__isnull=True, quiz_end_time__isnull=True)
+        quizzes_list = list(chain(quizzes, quizzes_null_start_time, quizzes_null_end_time, quizzes_null_both))
         response = {}
         body = list()
-        for quiz in quizzes:
+        for quiz in quizzes_list:
             scores_present = UserScore.objects.filter(user=user_id, quiz_id=quiz.id).count() > 0
             resume_quiz = UserAnswer.objects.filter(user=user_id, quiz_id=quiz.id).count() < quiz.no_of_question_to_display
             s = {'id': quiz.id, 'name': quiz.name, 'description': quiz.description, 'domain_name': quiz.domain_id.name, 'no_of_questions': quiz.no_of_questions, 'no_of_answers_to_display': quiz.no_of_question_to_display, 'pass_mark': quiz.pass_mark, 'time': quiz.time_in_minutes, 'hardness': quiz.hardness, "attended": scores_present, "resume": resume_quiz}

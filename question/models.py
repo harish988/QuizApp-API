@@ -18,13 +18,15 @@ class Domain(models.Model):
 class Quiz(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=5000)
+    description = models.CharField(max_length=5000, null=True)
     domain_id = models.ForeignKey(Domain, verbose_name = "domain", on_delete=models.CASCADE)
     no_of_questions = models.IntegerField()
     no_of_question_to_display = models.IntegerField()
     pass_mark = models.IntegerField()
     total_marks = models.IntegerField()
     time_in_minutes = models.IntegerField()
+    quiz_start_time = models.DateTimeField(null=True)
+    quiz_end_time = models.DateTimeField(null=True)
     quiz_image = models.ImageField(upload_to="quiz/staticfiles", null=True)
     hardness_choices = (
         ('BEGINNER', 'Beginner'),
@@ -52,7 +54,7 @@ class Quiz(models.Model):
 class Question(models.Model):
     id = models.AutoField(primary_key=True)
     quiz_id = models.ForeignKey(Quiz, verbose_name="quiz", on_delete=models.CASCADE)
-    question_text = models.CharField(max_length=5000)
+    question_text = models.CharField(max_length=5000, null=True)
     question_image = models.ImageField(upload_to="quiz/staticfiles", null=True)
     mark = models.IntegerField()
     question_type_choices = (
@@ -83,7 +85,7 @@ class Answer(models.Model):
     id = models.AutoField(primary_key=True)
     quiz_id = models.ForeignKey(Quiz, verbose_name="quiz", on_delete=models.CASCADE)
     question_id = models.ForeignKey(Question, verbose_name="question", on_delete=models.CASCADE)
-    answer_text = models.CharField(max_length=500)
+    answer_text = models.CharField(max_length=500, null=True)
     answer_image = models.ImageField(upload_to="quiz/staticfiles", null=True)
     is_correct_answer_choices = (
         ('TRUE', 'True'),
