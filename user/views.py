@@ -95,9 +95,10 @@ def login(request):
         response = {}
         user = User.objects.filter(username=user_data["username"])
         if(user.count() > 0):
+            userProfile = UserProfile.objects.filter(user=user[0])
             response["password"] = user[0].check_password(user_data["password"])
             if(response["password"]):
-                response["user_id"] = user[0].id
+                response["user_id"] = userProfile[0].id
                 response["message"] = "Password Matched"
             else:
                 response["message"] = "Password Mismatched"

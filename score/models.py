@@ -23,6 +23,7 @@ class UserScore(models.Model):
     user = models.ForeignKey(UserProfile, verbose_name="user", on_delete=models.CASCADE)
     quiz_id = models.ForeignKey(Quiz, verbose_name="quiz", on_delete=models.CASCADE)
     score = models.FloatField()
+    is_pass = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id)

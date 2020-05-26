@@ -100,9 +100,9 @@ def submit(request):
                     no_of_correct_answers = Answer.objects.filter(question_id=Question.objects.filter(id=question)[0], is_correct_answer='TRUE').count()
                     single_question_mark = sum(question_with_marks[question])/no_of_correct_answers
                 total_marks += single_question_mark
-            score = UserScore(user=user[0], quiz_id=quiz[0], score=total_marks)
+            score = UserScore(user=user[0], quiz_id=quiz[0], score=total_marks, is_pass=(total_marks >= quiz[0].pass_mark))
             score.save()
-            body = {'id': score.id, 'created_time': datetime.datetime.now(), 'score': total_marks}
+            body = {'id': score.id, 'created_time': datetime.datetime.now(), 'score': total_marks, 'is_pass': (total_marks >= quiz[0].pass_mark)}
             response["details"] = body
             response["status"] = 201
             response["code"] = "SUCCESS"
