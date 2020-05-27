@@ -20,6 +20,8 @@ from question.views import quiz, questions_with_answers
 from score.views import user_answer, submit, leaderboard
 from user.views import user, unique_username, login, userById, department, year, section
 from feedback.views import feedback
+from django.conf.urls.static import static
+from quiz import settings
 
 urlpatterns = [
     path('admin', admin.site.urls),
@@ -39,3 +41,5 @@ urlpatterns = [
     path("metadata/year", year, name="year"),
     path("metadata/section", section, name="section"),
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

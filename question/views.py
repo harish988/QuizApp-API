@@ -24,7 +24,13 @@ def quiz(request, user_id):
         for quiz in quizzes_list:
             scores_present = UserScore.objects.filter(user=user_id, quiz_id=quiz.id).count() > 0
             resume_quiz = UserAnswer.objects.filter(user=user_id, quiz_id=quiz.id).count() < quiz.no_of_question_to_display
-            s = {'id': quiz.id, 'name': quiz.name, 'description': quiz.description, 'domain_name': quiz.domain_id.name, 'no_of_questions': quiz.no_of_questions, 'no_of_answers_to_display': quiz.no_of_question_to_display, 'pass_mark': quiz.pass_mark, 'time': quiz.time_in_minutes, 'hardness': quiz.hardness, "attended": scores_present, "resume": resume_quiz}
+            try:
+                url = quiz.quiz_image.url
+                splitted_url = url.split("/")
+                image_name = splitted_url[-1]
+            except:
+                image_name = None
+            s = {'id': quiz.id, 'name': quiz.name, 'description': quiz.description, 'domain_name': quiz.domain_id.name, 'no_of_questions': quiz.no_of_questions, 'no_of_answers_to_display': quiz.no_of_question_to_display, 'pass_mark': quiz.pass_mark, 'time': quiz.time_in_minutes, 'hardness': quiz.hardness, "attended": scores_present, "resume": resume_quiz, "image_url":image_name}
             body.append(s)
         response['quiz'] = body
         return JsonResponse(response, status=status.HTTP_200_OK)
@@ -49,15 +55,23 @@ def questions_with_answers(request, user_id, quiz_id, question_id=None):
         for answer in answers:
             if(answer.question_id in question_answers):
                 before_adding_answers = question_answers[answer.question_id]
-                ans = {'id': answer.id,'answer_text': answer.answer_text}
+                try:
+                   answer_image_name = answer.answer_image.url.split("/")[-1]
+                except:
+                    answer_image_name = None
+                ans = {'id': answer.id,'answer_text': answer.answer_text, 'answer_image_name': answer_image_name}
                 before_adding_answers.append(ans)
                 question_answers[answer.question_id] = before_adding_answers
             else:
                 if(answered_questions_ids is not None and answer.question_id in answered_questions_ids):
                     continue
                 ans = {'id': answer.id, 'answer_text': answer.answer_text}
+                try:
+                   question_image_name = answer.question_id.question_image.url.split("/")[-1]
+                except:
+                    question_image_name = None
                 question_answers[answer.question_id] = [ans]
-                question_properties[answer.question_id] = {'id': answer.question_id.id, 'question_text': answer.question_id.question_text, 'mark': answer.question_id.mark, 'question_type': answer.question_id.question_type, 'no_of_answers': answer.question_id.no_of_answers}
+                question_properties[answer.question_id] = {'id': answer.question_id.id, 'question_text': answer.question_id.question_text, 'mark': answer.question_id.mark, 'question_type': answer.question_id.question_type, 'no_of_answers': answer.question_id.no_of_answers, 'question_image_name':question_image_name}
                 question_ids.append(answer.question_id)
         questions = list()
         answered_questions_count = 0
