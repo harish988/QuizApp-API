@@ -126,6 +126,6 @@ def leaderboard(request, quiz_id, top=10):
         top = user_scores_count
     user_scores = UserScore.objects.filter(quiz_id=quiz_id).order_by('-score')[:top]
     for score in user_scores:
-        body.append({'first_name': score.user.user.first_name, 'last_name': score.user.user.last_name, 'year': score.user.year, 'department': score.user.department, 'section': score.user.section, 'score': score.score})
+        body.append({'first_name': score.user.user.first_name, 'last_name': score.user.user.last_name, 'year': score.user.year.name, 'department': score.user.department.name, 'section': score.user.section.name, 'score': score.score})
     response["leaderboard"] = body
     return JsonResponse(response, status=status.HTTP_200_OK)
