@@ -30,3 +30,4 @@ class UserScore(models.Model):
 
     class Meta:
         verbose_name_plural = "User Scores"
+        unique_together = (('user', 'quiz_id'))

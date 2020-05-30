@@ -118,14 +118,21 @@ def submit(request):
 
 
 @api_view(['GET'])
-def leaderboard(request, quiz_id, top=10):
+def leaderboard(request, user_id, quiz_id, top=10):
     response = {}
     body = list()
     user_scores_count = UserScore.objects.filter(quiz_id=quiz_id).count()
     if(user_scores_count < top):
         top = user_scores_count
-    user_scores = UserScore.objects.filter(quiz_id=quiz_id).order_by('-score')[:top]
-    for score in user_scores:
-        body.append({'first_name': score.user.user.first_name, 'last_name': score.user.user.last_name, 'year': score.user.year.name, 'department': score.user.department.name, 'section': score.user.section.name, 'score': score.score})
+    user_scores = UserScore.objects.filter(quiz_id=quiz_id).order_by('-score')
+    user_top_scores = user_scores[:top]
+    user = None
+    for i in range(len(user_scores)):
+        if(user_scores[i].user.id == user_id):
+            user = {'rank': i, 'first_name': user_scores[i].user.user.first_name, 'last_name': user_scores[i].user.user.last_name, 'year': user_scores[i].user.year.name, 'department': user_scores[i].user.department.name, 'section': user_scores[i].user.section.name, 'score': user_scores[i].score}
+    for score in user_top_scores:
+        is_current_user = (score.user.id == user_id)
+        body.append({'first_name': score.user.user.first_name, 'last_name': score.user.user.last_name, 'year': score.user.year.name, 'department': score.user.department.name, 'section': score.user.section.name, 'score': score.score, 'is_current_user': is_current_user})
     response["leaderboard"] = body
+    response["user"] = user
     return JsonResponse(response, status=status.HTTP_200_OK)
