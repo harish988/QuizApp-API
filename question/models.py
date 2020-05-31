@@ -18,7 +18,7 @@ class Domain(models.Model):
 class Quiz(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=5000, null=True, blank=True)
+    description = models.CharField(max_length=4000, null=True, blank=True)
     domain_id = models.ForeignKey(Domain, verbose_name = "domain", on_delete=models.CASCADE)
     no_of_questions = models.IntegerField()
     no_of_question_to_display = models.IntegerField()
