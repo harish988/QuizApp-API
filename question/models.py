@@ -54,7 +54,7 @@ class Quiz(models.Model):
 class Question(models.Model):
     id = models.AutoField(primary_key=True)
     quiz_id = models.ForeignKey(Quiz, verbose_name="quiz", on_delete=models.CASCADE)
-    question_text = models.CharField(max_length=5000, null=True, blank=True)
+    question_text = models.CharField(max_length=4000, null=True, blank=True)
     question_image = models.ImageField(upload_to="quiz/staticfiles", null=True, blank=True)
     mark = models.IntegerField()
     question_type_choices = (
