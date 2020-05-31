@@ -91,12 +91,18 @@ WSGI_APPLICATION = 'quiz.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'sql_server.pyodbc',
         'NAME': 'quiz',
-        'USER': 'mepcoquiz',
+        'USER': 'mepcoquiz@mepcoquiz',
         'PASSWORD': 'Mut8t69U',
         'HOST': 'mepcoquiz.database.windows.net',
         'PORT': '1433',
+        'OPTIONS': {
+            'driver': 'FreeTDS',
+            'unicode_results': True,
+            'host_is_server': True,
+            'extra_params': 'tds_version=7.3',
+        }
     }
 }
 
