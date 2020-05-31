@@ -93,7 +93,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'quiz',
-        'USER': 'mepcoquiz@mepcoquiz',
+        'USER': 'mepcoquiz',
         'PASSWORD': 'Mut8t69U',
         'HOST': 'mepcoquiz.database.windows.net',
         'PORT': '1433',
