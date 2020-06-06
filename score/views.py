@@ -158,5 +158,4 @@ def generic_leaderboard(request, user_id):
             current_user = {'rank': i, 'first_name': user_spec[0].user.first_name, 'last_name': user_spec[0].user.last_name, 'year': user_spec[0].year.name, 'department': user_spec[0].department.name, 'section': user_spec[0].section.name, 'score': user.score, 'quizzes_attended': user.quizzes_attended}
     response["leaderboard"] = body
     response["user"] = current_user
-    return response
     return JsonResponse(response, status=status.HTTP_200_OK)
