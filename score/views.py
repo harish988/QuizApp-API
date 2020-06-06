@@ -9,7 +9,7 @@ import datetime
 import traceback
 from rest_framework import status
 from rest_framework.decorators import api_view
-
+from django.db.models import Sum
 
 @csrf_exempt
 @api_view(['POST'])
@@ -135,4 +135,28 @@ def leaderboard(request, user_id, quiz_id, top=10):
         body.append({'first_name': score.user.user.first_name, 'last_name': score.user.user.last_name, 'year': score.user.year.name, 'department': score.user.department.name, 'section': score.user.section.name, 'score': score.score, 'is_current_user': is_current_user})
     response["leaderboard"] = body
     response["user"] = user
+    return JsonResponse(response, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def generic_leaderboard(request, user_id):
+    response = {}
+    body = list()
+    current_user = None
+    users = UserScore.objects.raw("SELECT 1 as id, user_id, SUM(score) as 'score', COUNT(quiz_id_id) as 'quizzes_attended' FROM score_userscore GROUP BY user_id ORDER BY -SUM(score)")
+    i = 0
+    for user in users:
+        if(i == 10):
+            break
+        is_current_user = user.user_id
+        user_spec = UserProfile.objects.filter(id=user.user_id)
+        body.append({'first_name': user_spec[0].user.first_name, 'last_name': user_spec[0].user.last_name, 'year': user_spec[0].year.name, 'department': user_spec[0].department.name, 'section': user_spec[0].section.name, 'score': user.score, 'quizzes_attended': user.quizzes_attended, 'is_current_user': is_current_user})
+    for user in users:
+        i = i+1
+        if(user.user_id == user_id):
+            user_spec = UserProfile.objects.filter(id=user.user_id)
+            current_user = {'rank': i, 'first_name': user_spec[0].user.first_name, 'last_name': user_spec[0].user.last_name, 'year': user_spec[0].year.name, 'department': user_spec[0].department.name, 'section': user_spec[0].section.name, 'score': user.score, 'quizzes_attended': user.quizzes_attended}
+    response["leaderboard"] = body
+    response["user"] = current_user
+    return response
     return JsonResponse(response, status=status.HTTP_200_OK)

@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from question.views import quiz, questions_with_answers
-from score.views import user_answer, submit, leaderboard
+from score.views import user_answer, submit, leaderboard, generic_leaderboard
 from user.views import user, unique_username, login, userById, department, year, section
 from feedback.views import feedback
 from django.conf.urls.static import static
@@ -37,6 +37,7 @@ urlpatterns = [
     path("feedback", feedback, name="feedback"),
     path("leaderboard/<int:user_id>/<int:quiz_id>/<int:top>", leaderboard, name="leaderboard"),
     path("leaderboard/<int:user_id>/<int:quiz_id>", leaderboard, name="leaderboard"),
+    path("leaderboard/<int:user_id>", generic_leaderboard, name="generic_leaderboard"),
     path("metadata/department", department, name="department"),
     path("metadata/year", year, name="year"),
     path("metadata/section", section, name="section"),

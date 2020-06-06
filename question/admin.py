@@ -13,8 +13,8 @@ class DomainAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
 
 class AnswerAdmin(admin.ModelAdmin):
-    list_display = ['quiz_id', 'question_id', 'answer_text', 'is_correct_answer']
-    list_filter = ['quiz_id', 'question_id', 'is_correct_answer']
+    list_display = ['quiz_id', 'answer_text', 'is_correct_answer']
+    list_filter = ['quiz_id', 'is_correct_answer']
 
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Question, QuestionAdmin)
