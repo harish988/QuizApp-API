@@ -148,7 +148,7 @@ def generic_leaderboard(request, user_id):
     for user in users:
         if(i == 10):
             break
-        is_current_user = user.user_id
+        is_current_user = (user.user_id == user_id)
         user_spec = UserProfile.objects.filter(id=user.user_id)
         body.append({'first_name': user_spec[0].user.first_name, 'last_name': user_spec[0].user.last_name, 'year': user_spec[0].year.name, 'department': user_spec[0].department.name, 'section': user_spec[0].section.name, 'score': user.score, 'quizzes_attended': user.quizzes_attended, 'is_current_user': is_current_user})
     for user in users:
