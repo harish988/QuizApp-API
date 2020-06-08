@@ -128,10 +128,10 @@ def leaderboard(request, user_id, quiz_id, top=10):
     user_top_scores = user_scores[:top]
     user = None
     for i in range(len(user_scores)):
-        if(user_scores[i].user.id == user_id):
+        if(user_scores[i].id == user_id):
             user = {'rank': i, 'first_name': user_scores[i].user.user.first_name, 'last_name': user_scores[i].user.user.last_name, 'year': user_scores[i].user.year.name, 'department': user_scores[i].user.department.name, 'section': user_scores[i].user.section.name, 'score': user_scores[i].score}
     for score in user_top_scores:
-        is_current_user = (score.user.id == user_id)
+        is_current_user = (score.id == user_id)
         body.append({'first_name': score.user.user.first_name, 'last_name': score.user.user.last_name, 'year': score.user.year.name, 'department': score.user.department.name, 'section': score.user.section.name, 'score': score.score, 'is_current_user': is_current_user})
     response["leaderboard"] = body
     response["user"] = user
