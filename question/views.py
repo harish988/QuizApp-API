@@ -52,6 +52,7 @@ def questions_with_answers(request, user_id, quiz_id, question_id=None):
         question_ids = list()
         question_answers = {}
         question_properties = {}
+        questions_count = 0
         for answer in answers:
             try:
                 answer_image_name = answer.answer_image.url.split("/")[-1]
@@ -63,6 +64,7 @@ def questions_with_answers(request, user_id, quiz_id, question_id=None):
                 before_adding_answers.append(ans)
                 question_answers[answer.question_id] = before_adding_answers
             else:
+                questions_count = questions_count + 1
                 if(answered_questions_ids is not None and answer.question_id in answered_questions_ids):
                     continue
                 try:
@@ -77,6 +79,7 @@ def questions_with_answers(request, user_id, quiz_id, question_id=None):
         if(len(answered_questions_ids) > 0):
             answered_questions_count = len(answered_questions_ids)
         response['answered_questions_count'] = answered_questions_count
+        response["count"] = questions_count
         for id in question_ids:
             question_properties[id]['answers'] = question_answers[id]
             questions.append(question_properties[id])
