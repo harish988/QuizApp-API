@@ -53,19 +53,18 @@ def questions_with_answers(request, user_id, quiz_id, question_id=None):
         question_answers = {}
         question_properties = {}
         for answer in answers:
+            try:
+                answer_image_name = answer.answer_image.url.split("/")[-1]
+            except:
+                answer_image_name = None
+            ans = {'id': answer.id,'answer_text': answer.answer_text, 'answer_image_name': answer_image_name}
             if(answer.question_id in question_answers):
                 before_adding_answers = question_answers[answer.question_id]
-                try:
-                   answer_image_name = answer.answer_image.url.split("/")[-1]
-                except:
-                    answer_image_name = None
-                ans = {'id': answer.id,'answer_text': answer.answer_text, 'answer_image_name': answer_image_name}
                 before_adding_answers.append(ans)
                 question_answers[answer.question_id] = before_adding_answers
             else:
                 if(answered_questions_ids is not None and answer.question_id in answered_questions_ids):
                     continue
-                ans = {'id': answer.id, 'answer_text': answer.answer_text}
                 try:
                    question_image_name = answer.question_id.question_image.url.split("/")[-1]
                 except:
