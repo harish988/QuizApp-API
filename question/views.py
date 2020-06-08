@@ -33,7 +33,7 @@ def quiz(request, user_id):
                 image_name = splitted_url[-1]
             except:
                 image_name = None
-            s = {'id': quiz.id, 'name': quiz.name, 'description': quiz.description, 'domain_name': quiz.domain_id.name, 'no_of_questions': quiz.no_of_questions, 'no_of_answers_to_display': quiz.no_of_question_to_display, 'pass_mark': quiz.pass_mark, 'time': quiz.time_in_minutes, 'hardness': quiz.hardness, "attended": scores_present, "resume": resume_quiz, "image_url":image_name}
+            s = {'id': quiz.id, 'name': quiz.name, 'description': quiz.description, 'domain_name': quiz.domain_id.name, 'no_of_questions': quiz.no_of_questions, 'no_of_answers_to_display': quiz.no_of_question_to_display, 'total_mark': quiz.total_marks, 'pass_mark': quiz.pass_mark, 'time': quiz.time_in_minutes, 'hardness': quiz.hardness, "attended": scores_present, "resume": resume_quiz, "image_url":image_name}
             body.append(s)
         response['quiz'] = body
         return JsonResponse(response, status=status.HTTP_200_OK)
