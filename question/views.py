@@ -23,7 +23,10 @@ def quiz(request, user_id):
         body = list()
         for quiz in quizzes_list:
             scores_present = UserScore.objects.filter(user=user_id, quiz_id=quiz.id).count() > 0
-            resume_quiz = UserAnswer.objects.filter(user=user_id, quiz_id=quiz.id).count() < quiz.no_of_question_to_display
+            questions_answered = UserAnswer.objects.filter(user=user_id, quiz_id=quiz.id).count()
+            resume_quiz = False
+            if(questions_answered < quiz.no_of_question_to_display and questions_answered != 0):
+                resume_quiz =  True
             try:
                 url = quiz.quiz_image.url
                 splitted_url = url.split("/")
