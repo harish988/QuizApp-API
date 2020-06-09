@@ -21,6 +21,8 @@ def quiz(request, user_id):
         quizzes_list = list(chain(quizzes, quizzes_null_start_time, quizzes_null_end_time, quizzes_null_both))
         response = {}
         body = list()
+        to_be_resumed = list()
+        completed = list()
         for quiz in quizzes_list:
             scores_present = UserScore.objects.filter(user=user_id, quiz_id=quiz.id).count() > 0
             questions_answered = UserAnswer.objects.filter(user=user_id, quiz_id=quiz.id).count()
@@ -34,8 +36,13 @@ def quiz(request, user_id):
             except:
                 image_name = None
             s = {'id': quiz.id, 'name': quiz.name, 'description': quiz.description, 'domain_name': quiz.domain_id.name, 'no_of_questions': quiz.no_of_questions, 'no_of_answers_to_display': quiz.no_of_question_to_display, 'total_mark': quiz.total_marks, 'pass_mark': quiz.pass_mark, 'time': quiz.time_in_minutes, 'hardness': quiz.hardness, "attended": scores_present, "resume": resume_quiz, "image_url":image_name}
-            body.append(s)
-        response['quiz'] = body
+            if(scores_present):
+                completed.append(s)
+            elif(resume_quiz):
+                to_be_resumed.append(s)
+            else:
+                body.append(s)
+        response['quiz'] = to_be_resumed + body + completed
         return JsonResponse(response, status=status.HTTP_200_OK)
 
 

@@ -40,6 +40,8 @@ def user_answer(request):
                 if(answer.count() == 0):
                     response["message"] = "Answer with the given ID("+data['answer_id']+") not found"
                     return JsonResponse(response)
+                if(question[0].question_type == 'SINGLECHOICE'):
+                    UserAnswer.objects.filter(user=user[0], quiz_id=quiz[0], question_id=question[0]).delete()
                 score = UserAnswer.objects.create(user=user[0], quiz_id=quiz[0], question_id=question[0], answer_id=answer[0])
                 score.save()
                 body.append({"id": score.id, "created_time": datetime.datetime.now()})
@@ -81,7 +83,7 @@ def submit(request):
             question_with_marks = {}
             for user_answer in user_answers:
                 if(user_answer.question_id.question_type == 'SINGLECHOICE'):
-                    if(user_answer.answer_id.is_correct_answer):
+                    if(user_answer.answer_id.is_correct_answer == 'TRUE'):
                         question_with_marks[user_answer.question_id.id] = user_answer.question_id.mark
                     else:
                         question_with_marks[user_answer.question_id.id] = 0
