@@ -83,7 +83,7 @@ def submit(request):
             question_with_marks = {}
             for user_answer in user_answers:
                 if(user_answer.question_id.question_type == 'SINGLECHOICE'):
-                    if(user_answer.answer_id.is_correct_answer == 'TRUE'):
+                    if(user_answer.answer_id.is_correct_answer == "TRUE"):
                         question_with_marks[user_answer.question_id.id] = user_answer.question_id.mark
                     else:
                         question_with_marks[user_answer.question_id.id] = 0
